@@ -48,26 +48,30 @@ end
 #   mode '0755'
 # end
 
-directory '/projects/bin' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
+directory '/projects/bin'
+directory '/projects/pkg'
+directory '/projects/src'
 
-directory '/projects/pkg' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
-
-directory '/projects/src' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
+# directory '/projects/bin' do
+#   owner 'root'
+#   group 'root'
+#   mode '0755'
+#   action :create
+# end
+#
+# directory '/projects/pkg' do
+#   owner 'root'
+#   group 'root'
+#   mode '0755'
+#   action :create
+# end
+#
+# directory '/projects/src' do
+#   owner 'root'
+#   group 'root'
+#   mode '0755'
+#   action :create
+# end
 
 unless File.exist?('/etc/profile.d/path.sh')
   file '/etc/profile.d/path.sh'
@@ -81,29 +85,41 @@ unless File.exist?('/etc/profile.d/path.sh')
   end
 end
 
-unless File.exist?('/etc/profile.d/path.sh')
-  file '/etc/profile.d/path.sh'
-  ruby_block "profile.d" do
-    block do
-      line = 'export PATH=$PATH:/usr/local/go/bin'
-      file = Chef::Util::FileEdit.new("/etc/profile.d/path.sh")
-      file.insert_line_if_no_match("/#{line}/", "#{line}")
-      file.write_file
-    end
-  end
+template "/etc/profile.d/path.sh" do
+  source 'path.sh.erb'
+  not_if { File.exist?('/etc/profile.d/path.sh') }
 end
 
+# default['go']['gopath'] = '/projects/src'
+# default['go']['gobin']
 
-ruby_block "bash_profile add" do
-  block do
-    line1 = 'export GOBIN="$HOME/projects/bin"'
-    line2 = 'export GOPATH="$HOME/projects/src"'
-    file = Chef::Util::FileEdit.new(Dir.home + "/.bash_profile")
-    file.insert_line_if_no_match("/#{line1}/", "#{line1}")
-    file.insert_line_if_no_match("/#{line2}/", "#{line2}")
-    file.write_file
-  end
+bash 'modify bash_profile' do
+  code <<-EOH
+    echo "export GOBIN=#{node.default['go']['gobin']}" >> #{node.default['system']['home']}/.bash_profile
+    echo "export GOPATH=#{node.default['go']['gopath']}" >> #{node.default['system']['home']}/.bash_profile
+    EOH
 end
+
+# bash 'source setup files' do
+#   code <<-EOH
+#     echo "export GOBIN=#{node.default['go']['gobin']}" >> #{node.default['system']['home']}/.bash_profile
+#     echo "export GOPATH=#{node.default['go']['gopath']}" >> #{node.default['system']['home']}/.bash_profile
+#     EOH
+# end
+
+# ENV['GOPATH'] = "#{node.default['go']['gopath']}"
+
+
+# ruby_block "bash_profile add" do
+#   block do
+#     line1 = 'export GOBIN="$HOME/projects/bin"'
+#     line2 = 'export GOPATH="$HOME/projects/src"'
+#     file = Chef::Util::FileEdit.new(Dir.home + "/.bash_profile")
+#     file.insert_line_if_no_match("/#{line1}/", "#{line1}")
+#     file.insert_line_if_no_match("/#{line2}/", "#{line2}")
+#     file.write_file
+#   end
+# end
 
 
 # ENV['PATH'] = '$PATH:/usr/local/go/bin'

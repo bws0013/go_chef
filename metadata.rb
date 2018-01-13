@@ -20,3 +20,4 @@ chef_version '>= 12.1' if respond_to?(:chef_version)
 # source_url 'https://github.com/<insert_org_here>/go_chef'
 
 depends 'tar', '~> 2.1.1'
+depends 'git', '~> 8.0.0'

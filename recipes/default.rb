@@ -33,15 +33,15 @@ else
 end
 
 directory "#{node.default['go']['project_home']}/src" do
-  mode '0777'
+  mode "#{node.default['go']['dir_permissions']}"
   recursive true
 end
 directory "#{node.default['go']['project_home']}/bin" do
-  mode '0777'
+  mode "#{node.default['go']['dir_permissions']}"
   recursive true
 end
 directory "#{node.default['go']['project_home']}/pkg" do
-  mode '0777'
+  mode "#{node.default['go']['dir_permissions']}"
   recursive true
 end
 

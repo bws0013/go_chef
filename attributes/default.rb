@@ -8,3 +8,4 @@ default['go']['install_dir'] = '/usr/local/go/bin'
 default['go']['project_home'] = '/projects'
 default['go']['gopath'] = "#{default['go']['project_home']}/src"
 default['go']['gobin'] = "#{default['go']['project_home']}/bin"
+default['go']['dir_permissions'] = '0777'

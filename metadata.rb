@@ -1,11 +1,12 @@
 name 'go_chef'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
-license 'All Rights Reserved'
-description 'Installs/Configures go_chef'
-long_description 'Installs/Configures go_chef'
-version '0.1.0'
+maintainer 'github:bws0013'
+maintainer_email 'Post issues on github'
+license 'Apache License'
+version '1.0.0'
+supports 'centos'
 chef_version '>= 12.1' if respond_to?(:chef_version)
+source_url 'https://github.com/bws0013/go_chef'
+issues_url 'https://github.com/bws0013/go_chef/issues'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when

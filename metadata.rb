@@ -2,6 +2,8 @@ name 'go_chef'
 maintainer 'github:bws0013'
 maintainer_email 'Post issues on github'
 license 'Apache License'
+description 'Installs/Configures golang'
+long_description 'Installs/Configures golang'
 version '1.0.0'
 supports 'centos'
 chef_version '>= 12.1' if respond_to?(:chef_version)

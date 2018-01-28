@@ -1,1 +1,4 @@
-puts "THIS IS THE END OF THE RECIPE"
+go "Installing Go for Chef VM" do
+  version '1.9.2'
+  action :install
+end

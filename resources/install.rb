@@ -14,8 +14,8 @@ action :install do
   include_recipe 'tar'
   include_recipe 'git::default'
 
-  unless project_dir.nil?
-    directory project_dir do
+  unless new_resource.project_dir.nil?
+    directory new_resource.project_dir do
       owner 'root'
       group 'root'
       mode  '0755'
@@ -23,17 +23,17 @@ action :install do
     end
   end
 
-  if url.nil?
+  if new_resource.url.nil?
     Chef::Log.warn('Default Link for GoLang will be used as it was not explicitely set.')
-    url = "https://golang.org/dl/go#{version}.#{node['os']}-#{platform}.tar.gz"
+    new_resource.url = "https://golang.org/dl/go#{new_resource.version}.#{node['os']}-#{new_resource.platform}.tar.gz"
   end
-  tar_extract url do
-    target_dir install_dir
+  tar_extract new_resource.url do
+    target_dir new_resource.install_dir
   end
 
-  [gopath, gobin, 'pkg'].each do |dir|
-    directory "#{install_dir}#{dir}" do
-      mode perms
+  [new_resource.gopath, new_resource.gobin, 'pkg'].each do |dir|
+    directory "#{new_resource.install_dir}#{dir}" do
+      mode new_resource.perms
       recursive true
       action :create
     end
@@ -42,9 +42,9 @@ action :install do
   template "/etc/profile.d/path.sh" do
     source 'path.sh.erb'
     cookbook 'go_chef'
-    variables ({installpath: install_dir + "go/bin",
-               golang_path:  install_dir + gopath,
-               golang_bin:   install_dir + gobin})
+    variables ({installpath: new_resource.install_dir + "go/bin",
+               golang_path:  new_resource.install_dir + new_resource.gopath,
+               golang_bin:   new_resource.install_dir + new_resource.gobin})
     not_if { ::File.exist?('/etc/profile.d/path.sh') }
   end
 end
